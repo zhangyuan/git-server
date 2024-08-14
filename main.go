@@ -53,14 +53,14 @@ type KeysStore interface {
 	Authenticate(key ssh.PublicKey) (*User, error)
 }
 
-type FileKeysStore struct {
+type KeysFileStore struct {
 	ClientKeysPath string
 }
 
 type User struct {
 }
 
-func (keysStore *FileKeysStore) Authenticate(clientPublicKey ssh.PublicKey) (*User, error) {
+func (keysStore *KeysFileStore) Authenticate(clientPublicKey ssh.PublicKey) (*User, error) {
 	clientKeysBytes, err := os.ReadFile(keysStore.ClientKeysPath)
 	if err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func NewGitServer(addr, hostKeyFilePath, clientKeysPath string) (*GitServer, err
 		return nil, err
 	}
 
-	keyStore := &FileKeysStore{
+	keyStore := &KeysFileStore{
 		ClientKeysPath: clientKeysPath,
 	}
 
